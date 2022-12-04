@@ -24,10 +24,8 @@ public class UserPage {
             ResultSet rs = stmt.executeQuery("SELECT * FROM Store;");
 
             // 성공시 검색 결과 출력, 실패시 오류 출력
-            System.out.println("\n검색 결과 : ");
             while (rs.next())
-                System.out.println(rs.getInt(1) + " " + rs.getString(2) +
-                        " " + rs.getString(3));
+                System.out.printf("%-4d %-10s %-10s", rs.getInt(1), rs.getString(2), rs.getString(3));
             System.out.println();
         } catch (Exception e) {
             System.out.println(e);

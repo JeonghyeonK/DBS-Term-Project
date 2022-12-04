@@ -52,7 +52,7 @@ public class Main
                         if(type==1) {
                             ResultSet rs = stmt.executeQuery("SELECT * FROM User WHERE id = " + id + " AND pwd LIKE '" + pwd + "';");
 
-                            if (rs.getRow() == 1) {
+                            if (rs.next() && !rs.next()) {
                                 UserPage userPage = new UserPage(id, con);
                             }
                             else {
@@ -62,7 +62,7 @@ public class Main
                         else if(type==2) {
                             ResultSet rs = stmt.executeQuery("SELECT * FROM Owner WHERE id = " + id + " AND pwd LIKE '" + pwd + "';");
 
-                            if (rs.getRow() == 1) {
+                            if (rs.next() && !rs.next()) {
                                 OwnerPage ownerPage = new OwnerPage(id, con);
                             }
                             else {
@@ -72,7 +72,7 @@ public class Main
                         else if(type==3) {
                             ResultSet rs = stmt.executeQuery("SELECT * FROM Rider WHERE id = " + id + " AND pwd LIKE '" + pwd + "';");
 
-                            if (rs.getRow() == 1) {
+                            if (rs.next() && !rs.next()) {
                                 RiderPage riderPage = new RiderPage(id, con);
                             }
                             else {
