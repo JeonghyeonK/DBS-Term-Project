@@ -104,7 +104,7 @@ public class Main
 
                 } // 데이터 삽입
 
-                else if(work==2){
+                else if(work==2){ //수정 필요
 
                     try{
 

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class OrderAndReview {
@@ -13,86 +14,62 @@ public class OrderAndReview {
     private Connection con;
     private PreparedStatement prep_stmt = null;
     private Statement stmt = null;
+    private ArrayList<Integer> menus = new ArrayList<Integer>();
+    private ArrayList<Integer> counts = new ArrayList<Integer>();
 
     public OrderAndReview(int userId, int storeId, Connection con) {
         this.userId = userId;
         this.storeId = storeId;
         this.con = con;
 
-
-
-        try {
-            System.out.println("\n\n\n*** 가게 목록 *** ");
-            System.out.printf("%-4s %-10s %-5s %-8s %-10s\n", "id","상호","분류","배달팁","최소 주문 금액");
-
-
-            // 쿼리문 작성 및 실행
-            stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Store;");
-
-            // 성공시 검색 결과 출력, 실패시 오류 출력
-            while (rs.next())
-                System.out.printf("%-4d %-10s %-5s %-10d %-10d\n", rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5));
-            System.out.println();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        String deliveryOrTakeout;
+        String requestToOwner;
+        String requestToRider;
 
         while (true) {
 
-
-
-
             // 어떤 작업을 수행할지 입력받음
-            System.out.print("\n\n무엇을 하시겠습니까? \n\n1. 가게 세부사항 확인 \n2. 로그아웃\n\n입력 : ");
+            System.out.println("\n\n무엇을 하시겠습니까? \n\n1. 메뉴 담기 \n2. 주문하기 \n3. 리뷰 작성 \n4. 뒤로가기\n\n입력 : ");
             Scanner s = new Scanner(System.in);
             int work = s.nextInt();
 
 
             // 입력받은 작업들을 수행
             if (work == 1) {
-                try {
-                    // 유저, 사장님, 라이더 중 선택
-                    System.out.print("\n가게 아이디를 입력하세요. \n\n입력 : ");
-                    Scanner st= new Scanner(System.in);
-                    int store_id = st.nextInt();
-
-
-                    // 쿼리문 작성 및 실행
-                    stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM Store where id = " + store_id + ";");
-                    // 성공시 검색 결과 출력, 실패시 오류 출력
-                    System.out.printf("\n%-4s %-10s %-5s %-8s %-14s %-16s %-25s\n", "id","상호","분류","배달팁","최소 주문 금액", "전화번호", "주소");
-                    while (rs.next())
-                        System.out.printf("%-4d %-10s %-5s %-10d %-17d %-19s %-25s\n\n", rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getString(6), rs.getString(8)+" "+rs.getString(9));
-
-                    rs = stmt.executeQuery("SELECT * FROM Menu where store = " + store_id + ";");
-                    System.out.println("메뉴 목록");
-                    System.out.printf("%-4s %-10s %-5s %-8s %-14s\n", "id","분류","이름","설명","가격");
-                    while (rs.next())
-                        System.out.printf("%-4d %-10s %-5s %-10s %-17d\n", rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5));
-
-                    rs = stmt.executeQuery("SELECT * FROM Review where order_id IN (SELECT id FROM Orders where store = " + store_id + ");");
-                    System.out.println("\n리뷰 목록");
-                    System.out.printf("%-4s %-30s\n", "별점","리뷰");
-                    while (rs.next())
-                        System.out.printf("%-4d %-30s\n\n", rs.getInt(3), rs.getString(4));
-
-
-
-                    //OrderAndReview 생성
-
-
-
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+                System.out.print("\n메뉴 아이디를 입력하세요. \n\n입력 : ");
+                Scanner st = new Scanner(System.in);
+                int menuId = st.nextInt();
+                menus.add(menuId);
+                System.out.print("\n수량을 입력하세요. \n\n입력 : ");
+                Scanner st2 = new Scanner(System.in);
+                int count = st2.nextInt();
+                counts.add(count);
 
             } // 데이터 삽입
 
             else if (work == 2) {
-                System.out.println("로그아웃 되었습니다.");
-                break;
+                while(true) {
+                    System.out.print("\n\n배달과 포장 중 선택하세요. \n\n1. 배달 \n2. 포장\n\n입력 : ");
+                    Scanner st = new Scanner(System.in);
+                    int i = st.nextInt();
+                    if (i == 1) {
+                        deliveryOrTakeout = "배달";
+
+                        System.out.print("\n사장님께 드릴 요청사항을 작성하세요. : ");
+                        Scanner sc = new Scanner(System.in);
+                        requestToOwner = sc.nextLine();
+
+                        System.out.print("\n배달기사님께 드릴 요청사항을 작성하세요. : ");
+                        Scanner sc2 = new Scanner(System.in);
+                        requestToRider = sc2.nextLine();
+
+
+                        break;
+                    } else if (i == 2) {
+                        deliveryOrTakeout = "포장";
+                        break;
+                    } else System.out.println("잘못된 입력입니다.");
+                }
             } // 데이터 삭제
         }
     }
