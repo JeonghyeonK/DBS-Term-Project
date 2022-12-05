@@ -27,59 +27,58 @@ public class OrderAndReview {
         String requestToOwner;
         String requestToRider;
         String paymentMethod;
+        try {
+            while (true) {
 
-        while (true) {
-
-            // 어떤 작업을 수행할지 입력받음
-            System.out.println("\n\n무엇을 하시겠습니까? \n\n1. 메뉴 담기 \n2. 주문하기 \n3. 리뷰 작성 \n4. 뒤로가기\n\n입력 : ");
-            Scanner s = new Scanner(System.in);
-            int work = s.nextInt();
+                // 어떤 작업을 수행할지 입력받음
+                System.out.println("\n\n무엇을 하시겠습니까? \n\n1. 메뉴 담기 \n2. 주문하기 \n3. 리뷰 작성 \n4. 뒤로가기\n\n입력 : ");
+                Scanner s = new Scanner(System.in);
+                int work = s.nextInt();
 
 
-            // 입력받은 작업들을 수행
-            if (work == 1) {
-                System.out.print("\n메뉴 아이디를 입력하세요. \n\n입력 : ");
-                Scanner st = new Scanner(System.in);
-                int menuId = st.nextInt();
-                menus.add(menuId);
-                System.out.print("\n수량을 입력하세요. \n\n입력 : ");
-                Scanner st2 = new Scanner(System.in);
-                int count = st2.nextInt();
-                counts.add(count);
-
-            } // 데이터 삽입
-
-            else if (work == 2) {
-                while (true) {
-                    System.out.print("\n\n배달과 포장 중 선택하세요. \n\n1. 배달 \n2. 포장\n\n입력 : ");
+                // 입력받은 작업들을 수행
+                if (work == 1) {
+                    System.out.print("\n메뉴 아이디를 입력하세요. \n\n입력 : ");
                     Scanner st = new Scanner(System.in);
-                    int dOrT = st.nextInt();
-                    if (dOrT == 1) {
-                        deliveryOrTakeout = "배달";
+                    int menuId = st.nextInt();
+                    menus.add(menuId);
+                    System.out.print("\n수량을 입력하세요. \n\n입력 : ");
+                    Scanner st2 = new Scanner(System.in);
+                    int count = st2.nextInt();
+                    counts.add(count);
 
-                        System.out.print("\n사장님께 드릴 요청사항을 작성하세요. : ");
-                        Scanner sc = new Scanner(System.in);
-                        requestToOwner = sc.nextLine();
+                } // 데이터 삽입
 
-                        System.out.print("\n배달기사님께 드릴 요청사항을 작성하세요. : ");
-                        Scanner sc2 = new Scanner(System.in);
-                        requestToRider = sc2.nextLine();
+                else if (work == 2) {
+                    while (true) {
+                        System.out.print("\n\n배달과 포장 중 선택하세요. \n\n1. 배달 \n2. 포장\n\n입력 : ");
+                        Scanner st = new Scanner(System.in);
+                        int dOrT = st.nextInt();
+                        if (dOrT == 1) {
+                            deliveryOrTakeout = "배달";
 
-                        while (true) {
-                            System.out.print("\n결제 방식을 선택하세요. \n\n1. 현금 \n2. 카드\n\n입력 : ");
-                            Scanner sc3 = new Scanner(System.in);
-                            int pay = sc3.nextInt();
-                            if (pay == 1) {
-                                paymentMethod = "현금";
-                                break;
-                            } else if (pay == 2) {
-                                paymentMethod = "카드";
-                                break;
-                            } else System.out.println("잘못된 입력입니다.");
-                        }
+                            System.out.print("\n사장님께 드릴 요청사항을 작성하세요. : ");
+                            Scanner sc = new Scanner(System.in);
+                            requestToOwner = sc.nextLine();
+
+                            System.out.print("\n배달기사님께 드릴 요청사항을 작성하세요. : ");
+                            Scanner sc2 = new Scanner(System.in);
+                            requestToRider = sc2.nextLine();
+
+                            while (true) {
+                                System.out.print("\n결제 방식을 선택하세요. \n\n1. 현금 \n2. 카드\n\n입력 : ");
+                                Scanner sc3 = new Scanner(System.in);
+                                int pay = sc3.nextInt();
+                                if (pay == 1) {
+                                    paymentMethod = "현금";
+                                    break;
+                                } else if (pay == 2) {
+                                    paymentMethod = "카드";
+                                    break;
+                                } else System.out.println("잘못된 입력입니다.");
+                            }
 
 
-                        try {
                             // 쿼리문 작성
                             prep_stmt = con.prepareStatement(
                                     "INSERT INTO Orders(delivery_or_takeout, status, request_to_store, request_to_rider, payment_method, store, user, rider) VALUES ('" + deliveryOrTakeout + "', '주문 접수 대기', '" + requestToOwner + "', '" + requestToRider + "', '" + paymentMethod + "', " + storeId + ", " + userId + ", 1);");
@@ -132,24 +131,21 @@ public class OrderAndReview {
                                 } else System.out.println("잘못된 입력입니다.");
                             }
 
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
 
-                        break;
+                            break;
 
-                    } else if (dOrT == 2) { //테스트 필요
-                        deliveryOrTakeout = "포장";
+                        } else if (dOrT == 2) { //테스트 필요
+                            deliveryOrTakeout = "포장";
 
-                        System.out.print("\n사장님께 드릴 요청사항을 작성하세요. : ");
-                        Scanner sc = new Scanner(System.in);
-                        requestToOwner = sc.nextLine();
+                            System.out.print("\n사장님께 드릴 요청사항을 작성하세요. : ");
+                            Scanner sc = new Scanner(System.in);
+                            requestToOwner = sc.nextLine();
 
-                        System.out.print("\n결제 방식을 선택하세요. \n\n1. 현금 \n2. 카드\n\n입력 : ");
-                        Scanner sc3 = new Scanner(System.in);
-                        paymentMethod = sc3.nextLine();
+                            System.out.print("\n결제 방식을 선택하세요. \n\n1. 현금 \n2. 카드\n\n입력 : ");
+                            Scanner sc3 = new Scanner(System.in);
+                            paymentMethod = sc3.nextLine();
 
-                        try {
+
                             // 쿼리문 작성
                             prep_stmt = con.prepareStatement(
                                     "INSERT INTO Orders(delivery_or_takeout, status, request_to_store, payment_method, store, user) VALUES ('" + deliveryOrTakeout + "', '주문 접수 대기', '" + requestToOwner + "', '" + paymentMethod + "', " + storeId + ", " + userId + ");");
@@ -203,18 +199,13 @@ public class OrderAndReview {
                             }
 
 
-                        } catch (Exception e) {
-                            System.out.println(e);
-                        }
+                            break;
+                        } else System.out.println("잘못된 입력입니다.");
+                    }
+                } // 데이터 삭제
+                else if (work == 3) {
+                    //리뷰 작성
 
-                        break;
-                    } else System.out.println("잘못된 입력입니다.");
-                }
-            } // 데이터 삭제
-            else if (work == 3) {
-                //리뷰 작성
-
-                try {
 
                     // 쿼리문 작성 및 실행
                     stmt = con.createStatement();
@@ -297,16 +288,15 @@ public class OrderAndReview {
 
                     OrderAndReview orderAndReview = new OrderAndReview(userId, storeId, con);
 
-                } catch (Exception e) {
-                    System.out.println(e);
+
+                } else if (work == 4) {
+                    break;
+                } else {
+                    System.out.println("잘못된 입력입니다.");
                 }
-
-
-            } else if (work == 4) {
-                break;
-            } else {
-                System.out.println("잘못된 입력입니다.");
             }
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
 }
