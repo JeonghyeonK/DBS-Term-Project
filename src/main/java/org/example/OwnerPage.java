@@ -118,6 +118,37 @@ public class OwnerPage {
 
 
                         } else if (work2 == 3) {
+                            String category;
+                            String name;
+                            String text;
+                            int price;
+
+
+                            System.out.print("카테고리를 입력하세요 : ");
+                            Scanner sc1 = new Scanner(System.in);
+                            category = sc1.nextLine();
+
+                            System.out.print("메뉴 이름을 입력하세요 : ");
+                            Scanner sc2 = new Scanner(System.in);
+                            name = sc2.nextLine();
+
+                            System.out.print("내용을 입력하세요 : ");
+                            Scanner sc3 = new Scanner(System.in);
+                            text = sc3.nextLine();
+
+                            System.out.print("가격을 입력하세요 : ");
+                            Scanner sc4 = new Scanner(System.in);
+                            price = sc4.nextInt();
+
+                            rs = stmt.executeQuery("INSERT INTO Menu(category, name, text, price) VALUES ('" + category + "', '" + name + "', '" + text + "', " + price + ");");
+                            rs = stmt.executeQuery("SELECT LAST_INSERT_ID();");
+                            if (rs.next()) {
+                                menuId = rs.getInt(1);
+                            }
+
+                            System.out.println("\n메뉴가 등록되었습니다. \n 메뉴 id : "+menuId+"\n");
+
+
 
 
                         } else if (work2 == 4) {
