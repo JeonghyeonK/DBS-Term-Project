@@ -209,29 +209,21 @@ public class OrderAndReview {
 
                     // 쿼리문 작성 및 실행
                     stmt = con.createStatement();
-                    System.out.println("쿼리 전");
                     ResultSet rs = stmt.executeQuery("SELECT * FROM Orders where store = " + storeId + " AND user = " + userId + ";");
                     // 성공시 검색 결과 출력, 실패시 오류 출력
-                    System.out.println("쿼리 후");
 
 
                     int recentlyOrderId = 0;
                     while (rs.next()) {
-                        System.out.println("쿼리 는" + rs.getInt(8));
                         recentlyOrderId = rs.getInt(1);
                     }
                     if (recentlyOrderId == 0) {
                         System.out.println("이 가게에 주문한 이력이 없습니다.");
                     } else {
 
-                        System.out.println("여기?");
-
-
-                        System.out.println("여기여");
                         stmt = con.createStatement();
                         rs = stmt.executeQuery("SELECT * FROM Review where order_id = " + recentlyOrderId + ";");
 
-                        System.out.println("여기여기");
                         if (rs.next()) {
                             System.out.println("가장 최근 주문에 이미 리뷰를 남겼습니다.");
                         } else {
