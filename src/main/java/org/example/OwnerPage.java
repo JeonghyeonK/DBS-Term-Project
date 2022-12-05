@@ -25,7 +25,7 @@ public class OwnerPage {
                 System.out.println("\n\n\n*** 가게 관리 *** ");
 
                 // 어떤 작업을 수행할지 입력받음
-                System.out.print("\n무엇을 하시겠습니까? \n\n1. 가게 관리 \n2. 가게 등록\n2. 로그아웃\n\n입력 : ");
+                System.out.print("\n무엇을 하시겠습니까? \n\n1. 가게 관리 \n2. 가게 등록\n3. 로그아웃\n\n입력 : ");
                 Scanner s = new Scanner(System.in);
                 int work = s.nextInt();
 
@@ -34,7 +34,7 @@ public class OwnerPage {
 
                     // 쿼리문 작성 및 실행
                     stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery("SELECT * FROM Store;");
+                    ResultSet rs = stmt.executeQuery("SELECT * FROM Store where owner = "+ownerId+";");
                     // 성공시 검색 결과 출력, 실패시 오류 출력
                     System.out.printf("\n%-4s %-10s %-5s %-8s %-14s %-16s %-25s\n", "id", "상호", "분류", "배달팁", "최소 주문 금액", "전화번호", "주소");
                     while (rs.next())
@@ -59,32 +59,40 @@ public class OwnerPage {
                     while (rs.next())
                         System.out.printf("%-4d %-30s\n\n", rs.getInt(3), rs.getString(4));
 
+                    while(true) {
+                        System.out.print("\n\n무엇을 하시겠습니까? \n\n1. 전체 주문 목록 확인 \n2. 주문 완료되지 않은 주문 목록 확인 및 변경 \n3. 메뉴 추가 \n4. 메뉴 삭제 \n5. 가게 삭제 \n6. 뒤로 가기\n\n입력 : ");
+                        Scanner st2 = new Scanner(System.in);
+                        int work2 = st2.nextInt();
 
-                    System.out.print("\n\n무엇을 하시겠습니까? \n\n1. 날짜별 주문 목록 확인 \n2. 주문 완료되지 않은 주문 목록 확인 \n3. 메뉴 추가 \n4. 메뉴 삭제 \n5. 가게 삭제 \n6. 뒤로 가기\n\n입력 : ");
-                    Scanner st2 = new Scanner(System.in);
-                    int work2 = st2.nextInt();
+                        if (work2 == 1) {
+                            stmt = con.createStatement();
+                            rs = stmt.executeQuery("SELECT * FROM Orders where store = " + storeId + ";");
+                            // 성공시 검색 결과 출력, 실패시 오류 출력
+                            System.out.printf("\n%-18s %-18s %-18s %-18s %-18s %-18s\n", "id", "배달/포장 여부", "주문 상태", "가게 요청 사항", "지불 방법", "가게 번호");
+                            while (rs.next())
+                                System.out.printf("%-16d %-16s %-16s %-16s %-16s %-16d\n", rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(6), rs.getInt(7));
 
-                    if (work2 == 1) {
-                        stmt = con.createStatement();
-                        rs = stmt.executeQuery("SELECT * FROM Orders where store = " + storeId + ";");
-                        // 성공시 검색 결과 출력, 실패시 오류 출력
-                        System.out.printf("\n%-18s %-18s %-18s %-18s %-18s %-18s\n", "id", "배달/포장 여부", "주문 상태", "가게 요청 사항", "지불 방법", "가게 번호");
-                        while (rs.next())
-                            System.out.printf("%-16d %-16s %-16s %-16s %-16s %-16d\n\n", rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(6), rs.getInt(7));
+                        } else if (work2 == 2) {
+                            stmt = con.createStatement();
+                            rs = stmt.executeQuery("SELECT * FROM Orders where store = " + storeId + " AND status != '배달 완료';");
+                            // 성공시 검색 결과 출력, 실패시 오류 출력
+                            System.out.printf("\n%-18s %-18s %-18s %-18s %-18s %-18s\n", "id", "배달/포장 여부", "주문 상태", "가게 요청 사항", "지불 방법", "가게 번호");
+                            while (rs.next())
+                                System.out.printf("%-16d %-16s %-16s %-16s %-16s %-16d\n", rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(6), rs.getInt(7));
 
+                        } else if (work2 == 3) {
 
-                    } else if (work2 == 2) {
+                        } else if (work2 == 4) {
 
-                    } else if (work2 == 3) {
+                        } else if (work2 == 5) {
 
-                    } else if (work2 == 4) {
-
-                    } else if (work2 == 5) {
-
-                    } else if (work2 == 6) {
-
+                        } else if (work2 == 6) {
+                            break;
+                        }
+                        else{
+                            System.out.println("잘못된 입력입니다.");
+                        }
                     }
-
 
                 } // 데이터 삽입
 
