@@ -17,35 +17,29 @@ public class UserPage {
         this.userId = userId;
         this.con = con;
 
-
-
-        try {
-            System.out.println("\n\n\n*** 가게 목록 *** ");
-            System.out.printf("%-4s %-10s %-5s %-8s %-10s\n", "id","상호","분류","배달팁","최소 주문 금액");
-
-
-            // 쿼리문 작성 및 실행
-            stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Store;");
-
-            // 성공시 검색 결과 출력, 실패시 오류 출력
-            while (rs.next())
-                System.out.printf("%-4d %-10s %-5s %-10d %-10d\n", rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5));
-            System.out.println();
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
         while (true) {
 
+            try {
+                System.out.println("\n\n\n*** 가게 목록 *** ");
+                System.out.printf("%-4s %-10s %-5s %-8s %-10s\n", "id","상호","분류","배달팁","최소 주문 금액");
 
 
+                // 쿼리문 작성 및 실행
+                stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM Store;");
+
+                // 성공시 검색 결과 출력, 실패시 오류 출력
+                while (rs.next())
+                    System.out.printf("%-4d %-10s %-5s %-10d %-10d\n", rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5));
+                System.out.println();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
 
             // 어떤 작업을 수행할지 입력받음
             System.out.print("\n\n무엇을 하시겠습니까? \n\n1. 가게 세부사항 확인 \n2. 로그아웃\n\n입력 : ");
             Scanner s = new Scanner(System.in);
             int work = s.nextInt();
-
 
             // 입력받은 작업들을 수행
             if (work == 1) {
