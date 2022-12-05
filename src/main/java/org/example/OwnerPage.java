@@ -14,6 +14,7 @@ public class OwnerPage {
     private Statement stmt = null;
     private ResultSet rs;
     private int storeId;
+    private int menuId;
 
 
     public OwnerPage(int ownerId, Connection con) {
@@ -121,6 +122,22 @@ public class OwnerPage {
 
                         } else if (work2 == 4) {
 
+                            rs = stmt.executeQuery("SELECT * FROM Menu where store = " + storeId + ";");
+                            System.out.println("메뉴 목록");
+                            System.out.printf("%-4s %-10s %-5s %-8s %-14s\n", "id", "분류", "이름", "설명", "가격");
+                            while (rs.next())
+                                System.out.printf("%-4d %-10s %-5s %-10s %-17d\n", rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5));
+
+                            rs = stmt.executeQuery("SELECT * FROM Review where order_id IN (SELECT id FROM Orders where store = " + storeId + ");");
+
+                            System.out.print("메뉴 id를 입력하세요 : ");
+                            Scanner sc1 = new Scanner(System.in);
+                            menuId = sc1.nextInt();
+
+                            rs = stmt.executeQuery("DELETE FROM Menu where id = "+menuId+";");
+
+                            System.out.println("\n메뉴가 삭제되었습니다.\n\n");
+
                         } else if (work2 == 5) {
                             break;
                         } else {
@@ -190,14 +207,24 @@ public class OwnerPage {
                     zipcode = sc8.nextLine();
 
                     rs = stmt.executeQuery("INSERT INTO Store(name, category, delivery_tip, minimum_money, cellphone, roadname, detail, zipcode) VALUES ('" + name + "', '" + category + "', " + delivery_tip + ", " + minimum_money + ", '" + phone + "', '" + roadname + "', '" + detail + "', '" + zipcode + "');");
+                    rs = stmt.executeQuery("SELECT LAST_INSERT_ID();");
+                    if (rs.next()) {
+                        storeId = rs.getInt(1);
+                    }
 
-                    System.out.println("\n가게가 등록되었습니다. \n");
+                    System.out.println("\n가게가 등록되었습니다. \n 가게 id : "+storeId+"\n");
 
 
                 }
 
                 else if (work == 3) {
-                    //가게 삭제
+                    System.out.print("가게 id를 입력하세요 : ");
+                    Scanner sc1 = new Scanner(System.in);
+                    storeId = sc1.nextInt();
+
+                    rs = stmt.executeQuery("DELETE FROM Store where id = "+storeId+";");
+
+                    System.out.println("\n가게가 삭제되었습니다.\n\n");
                 }
 
                 else if (work == 4) {
